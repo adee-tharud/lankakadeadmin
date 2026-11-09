@@ -8,7 +8,7 @@ export type ApiError = {
 }
 
 export type ApiRequest =
-  | { path: string; method?: 'GET' }
+  | { path: string; method?: 'GET'; public?: boolean }
   | { path: string; method: 'POST' | 'PUT' | 'PATCH' | 'DELETE'; body?: object }
 
 type ApiResult = { data: unknown; error?: undefined } | { data?: undefined; error: ApiError }
@@ -22,15 +22,17 @@ export async function request(args: ApiRequest, signal?: AbortSignal): Promise<A
     } }
   }
 
-  const body = 'body' in args && args.body !== undefined ? JSON.stringify(args.body) : undefined
-  const timeout = AbortSignal.timeout(12_000)
+  const input = 'body' in args ? args.body : undefined
+  const multipart = input instanceof FormData
+  const body = multipart ? input : input === undefined ? undefined : JSON.stringify(input)
+  const timeout = AbortSignal.timeout(multipart ? 30_000 : 12_000)
 
   try {
     const response = await fetch(`${apiOrigin}/api/v1${args.path}`, {
       method: args.method ?? 'GET',
       body,
-      headers: body === undefined ? undefined : { 'Content-Type': 'application/json' },
-      credentials: 'include',
+      headers: multipart || body === undefined ? undefined : { 'Content-Type': 'application/json' },
+      credentials: 'public' in args && args.public ? 'omit' : 'include',
       cache: 'no-store',
       redirect: 'error',
       signal: signal ? AbortSignal.any([signal, timeout]) : timeout,

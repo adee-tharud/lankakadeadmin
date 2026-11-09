@@ -3,10 +3,16 @@ import { Link, Navigate, Route, Routes } from 'react-router-dom'
 import { useAdminSessionQuery } from '../features/auth/authApi'
 import { SignInPage } from '../features/auth/SignInPage'
 import { DashboardPage } from '../features/dashboard/DashboardPage'
+import { CategoriesPage } from '../features/catalog/CategoriesPage'
+import { LiveCatalogPage, LiveProductPage } from '../features/catalog/LiveCatalogPage'
+import { NewProductPage, ProductPage } from '../features/catalog/ProductPage'
+import { ProductsPage } from '../features/catalog/ProductsPage'
 import { adminApi } from '../shared/api/adminApi'
 import type { ApiError } from '../shared/api/request'
 import { Button } from '../shared/ui/Button'
 import { useAppDispatch } from './hooks'
+import { AdminLayout } from './layout/AdminLayout'
+import { categoriesPath, dashboardPath, liveCatalogPath, newProductPath, productsPath } from './paths'
 
 const signInPath = '/sign-in'
 
@@ -64,22 +70,38 @@ export function AppRoutes() {
     dispatch(adminApi.util.resetApiState())
   }
 
+  let protectedLayout = <Navigate to={signInPath} replace />
+  if (checkingSession) {
+    protectedLayout = <SessionNotice message="Checking your session…" />
+  } else if (session.isError) {
+    protectedLayout = (
+      <SessionNotice
+        message={session.error?.message ?? 'We could not verify your session.'}
+        retry={() => void session.refetch()}
+      />
+    )
+  } else if (account) {
+    protectedLayout = <AdminLayout account={account} onSignedOut={clearSession} />
+  }
+
   return (
     <Routes>
       <Route path={signInPath} element={
-        account ? <Navigate to="/" replace /> :
+        account ? <Navigate to={dashboardPath} replace /> :
           checkingSession ? <SessionNotice message="Checking your session…" /> :
             <SignInPage confirmSession={confirmSession} />
       } />
-      <Route path="/" element={
-        checkingSession ? <SessionNotice message="Checking your session…" /> :
-          session.isError ? <SessionNotice
-            message={session.error?.message ?? 'We could not verify your session.'}
-            retry={() => void session.refetch()} /> :
-            account ? <DashboardPage account={account} onSignedOut={clearSession} /> :
-              <Navigate to={signInPath} replace />
-      } />
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route element={protectedLayout}>
+        <Route index element={<Navigate to={dashboardPath} replace />} />
+        <Route path={dashboardPath} element={account && <DashboardPage fullName={account.fullName} />} />
+        <Route path={categoriesPath} element={<CategoriesPage />} />
+        <Route path={productsPath} element={<ProductsPage />} />
+        <Route path={newProductPath} element={<NewProductPage />} />
+        <Route path={`${productsPath}/:productId`} element={<ProductPage />} />
+        <Route path={liveCatalogPath} element={<LiveCatalogPage />} />
+        <Route path={`${liveCatalogPath}/:slug`} element={<LiveProductPage />} />
+      </Route>
+      <Route path="*" element={<Navigate to={dashboardPath} replace />} />
     </Routes>
   )
 }

@@ -27,6 +27,10 @@ src/
 
 Keep pages, feature-specific components, types, selectors, and API definitions with the owning feature. Move code to `shared/` when it has a common purpose across features. Shared code cannot import features. Compose features and providers in `app/`. Create folders when the first file needs them.
 
+## Admin routes
+
+`/sign-in` is public. After the app verifies an admin session, `/` and `/sign-in` redirect to `/dashboard`. Add staff pages as children of the protected layout in [routes.tsx](../src/app/routes.tsx) so they share session checks, navigation, and sign-out. Add navigation links as their pages become available.
+
 ## State ownership
 
 | State | Owner |

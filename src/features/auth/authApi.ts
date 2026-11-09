@@ -46,6 +46,7 @@ export async function signOut(): Promise<ApiError | undefined> {
 const authApi = adminApi.injectEndpoints({
   endpoints: (build) => ({
     adminSession: build.query<AdminAccount | null, void>({
+      providesTags: ['Session'],
       async queryFn(_arg, _api, _options, baseQuery) {
         const result = await baseQuery({ path: '/account' })
         if (result.error) {

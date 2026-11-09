@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { signIn } from './authApi'
 import type { ApiError } from '../../shared/api/request'
 import { Button } from '../../shared/ui/Button'
+import { WorkspaceBrand } from '../../shared/ui/WorkspaceBrand'
 
 const inputStyle = 'mt-2 w-full rounded-xl border border-border bg-surface px-4 py-3 text-base text-ink outline-none placeholder:text-muted focus-visible:border-focus focus-visible:ring-2 focus-visible:ring-focus/30 aria-invalid:border-error'
 
@@ -69,16 +70,8 @@ export function SignInPage({ confirmSession }: Props) {
     <main className="grid min-h-dvh place-items-center px-4 py-6 sm:px-8 sm:py-10">
       <div className="grid w-full max-w-5xl overflow-hidden rounded-3xl border border-border bg-surface shadow-xl shadow-sidebar/5 lg:min-h-[36rem] lg:grid-cols-[2fr_3fr]">
         <aside className="relative flex flex-col justify-between overflow-hidden bg-sidebar px-7 py-6 text-on-sidebar sm:px-10 lg:py-10">
-          <div className="relative z-10 flex items-center gap-3">
-            <span className="grid size-11 place-items-center rounded-xl bg-on-sidebar text-sidebar" aria-hidden="true">
-              <svg viewBox="0 0 24 24" className="size-6" fill="none" stroke="currentColor" strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M4 10h16l-2 9H6l-2-9ZM9 10l3-5 3 5M9 13v3m6-3v3" />
-              </svg>
-            </span>
-            <div>
-              <p className="text-base font-semibold leading-5">LankaKade</p>
-              <p className="text-xs text-on-sidebar/75">Admin workspace</p>
-            </div>
+          <div className="relative z-10">
+            <WorkspaceBrand />
           </div>
 
           <svg viewBox="0 0 320 240" className="pointer-events-none absolute right-[-4rem] top-[-2rem] h-40 text-on-sidebar/20 lg:inset-x-0 lg:top-[22%] lg:h-auto lg:w-full" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
