@@ -2,6 +2,14 @@
 
 The [LankaKade admin knowledge base](./knowledge-base/README.md) describes the project's backend integration, design system, file structure, and engineering standards.
 
+## Run the admin panel locally
+
+1. Set up the [backend and an MFA-enrolled admin account](../../backend/knowledge-base/auth-and-accounts.md).
+2. Copy `.env.example` to `.env.local` and set `VITE_API_ORIGIN` to the backend origin.
+3. Start the backend and run `npm run dev` here. Open [the local admin workspace](http://localhost:5174). Use the exact origin configured in the backend's `ADMIN_ORIGIN`.
+
+Sign in with the provisioned admin account and an authenticator or recovery code.
+
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
 Currently, two official plugins are available:
