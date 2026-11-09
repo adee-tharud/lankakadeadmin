@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@theme static {
+  --color-sidebar: #0b5038;
+  --color-on-sidebar: #f4faf5;
+  --color-canvas: #f6f7f1;
+  --color-surface: #ffffff;
+  --color-surface-accent: #e8f3e2;
+  --color-ink: #153b2e;
+  --color-muted: #53635b;
+  --color-border: #dbe4da;
+  --color-focus: #23734e;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+  }
+}
