@@ -10,6 +10,8 @@
   --color-muted: #53635b;
   --color-border: #dbe4da;
   --color-focus: #23734e;
+  --color-error: #9b252b;
+  --color-error-surface: #fff2f2;
 }
 
 @layer base {
